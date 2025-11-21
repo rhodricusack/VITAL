@@ -316,7 +316,8 @@ def analyze_patch_complexity(image):
     
     return results
 
-def aggregate_complexity_measures(complexity_list, use_bootstrap=True, n_bootstrap=1000):
+def aggregate_complexity_measures(complexity_list, use_bootstrap=True, n_bootstrap=1000, 
+                                 neuron_grouped=None):
     """
     Aggregate complexity measures across multiple patches.
     
@@ -324,6 +325,9 @@ def aggregate_complexity_measures(complexity_list, use_bootstrap=True, n_bootstr
         complexity_list: List of complexity dictionaries from analyze_patch_complexity
         use_bootstrap: If True, use bootstrap SEM; if False, use traditional SEM
         n_bootstrap: Number of bootstrap iterations
+        neuron_grouped: Optional list of lists, where each sublist contains complexity measures
+                       from patches of a single neuron. If provided, bootstrap resampling
+                       is done at the neuron level (more conservative).
     
     Returns:
         Dictionary with mean and SEM of each measure
@@ -339,8 +343,17 @@ def aggregate_complexity_measures(complexity_list, use_bootstrap=True, n_bootstr
         values = np.array([c[key] for c in complexity_list])
         summary[f'{key}_mean'] = np.mean(values)
         
-        if use_bootstrap:
-            # Bootstrap SEM
+        if use_bootstrap and neuron_grouped is not None:
+            # Neuron-level bootstrap: resample neurons, not individual patches
+            # This accounts for correlation within neurons
+            boot_sem, ci_lower, ci_upper = bootstrap_neuron_level(
+                neuron_grouped, key, n_bootstrap=n_bootstrap
+            )
+            summary[f'{key}_sem'] = boot_sem
+            summary[f'{key}_ci_lower'] = ci_lower
+            summary[f'{key}_ci_upper'] = ci_upper
+        elif use_bootstrap:
+            # Patch-level bootstrap (original method, likely underestimates SE)
             boot_sem, ci_lower, ci_upper = bootstrap_sem(values.reshape(-1, 1), n_bootstrap=n_bootstrap)
             summary[f'{key}_sem'] = boot_sem[0]
             summary[f'{key}_ci_lower'] = ci_lower[0]
@@ -358,7 +371,17 @@ def aggregate_complexity_measures(complexity_list, use_bootstrap=True, n_bootstr
         values = np.array([c['wavelet_energy_distribution'][wkey] for c in complexity_list])
         summary[f'wavelet_{wkey}_mean'] = np.mean(values)
         
-        if use_bootstrap:
+        if use_bootstrap and neuron_grouped is not None:
+            # Neuron-level bootstrap
+            boot_sem, ci_lower, ci_upper = bootstrap_neuron_level(
+                neuron_grouped, f'wavelet_{wkey}', n_bootstrap=n_bootstrap, 
+                is_wavelet=True
+            )
+            summary[f'wavelet_{wkey}_sem'] = boot_sem
+            summary[f'wavelet_{wkey}_ci_lower'] = ci_lower
+            summary[f'wavelet_{wkey}_ci_upper'] = ci_upper
+        elif use_bootstrap:
+            # Patch-level bootstrap
             boot_sem, ci_lower, ci_upper = bootstrap_sem(values.reshape(-1, 1), n_bootstrap=n_bootstrap)
             summary[f'wavelet_{wkey}_sem'] = boot_sem[0]
             summary[f'wavelet_{wkey}_ci_lower'] = ci_lower[0]
@@ -369,6 +392,59 @@ def aggregate_complexity_measures(complexity_list, use_bootstrap=True, n_bootstr
         summary[f'wavelet_{wkey}_std'] = np.std(values)
     
     return summary
+
+def bootstrap_neuron_level(neuron_grouped, measure_key, n_bootstrap=1000, 
+                           confidence=95, is_wavelet=False):
+    """
+    Bootstrap resampling at the neuron level to account for within-neuron correlation.
+    
+    Args:
+        neuron_grouped: List of lists, where each sublist contains complexity measures
+                       from patches of a single neuron
+        measure_key: The key of the measure to bootstrap (e.g., 'entropy')
+        n_bootstrap: Number of bootstrap iterations
+        confidence: Confidence level for intervals (default 95%)
+        is_wavelet: If True, extract from wavelet_energy_distribution
+    
+    Returns:
+        bootstrap_sem: Standard error of the mean from bootstrap
+        ci_lower: Lower confidence interval
+        ci_upper: Upper confidence interval
+    """
+    n_neurons = len(neuron_grouped)
+    bootstrap_means = []
+    
+    # Perform bootstrap resampling at neuron level
+    for _ in range(n_bootstrap):
+        # Resample neurons with replacement
+        neuron_indices = np.random.choice(n_neurons, size=n_neurons, replace=True)
+        
+        # Collect all patches from the resampled neurons
+        bootstrap_values = []
+        for idx in neuron_indices:
+            neuron_patches = neuron_grouped[idx]
+            for patch_measure in neuron_patches:
+                if is_wavelet:
+                    # Extract wavelet key (remove 'wavelet_' prefix)
+                    wkey = measure_key.replace('wavelet_', '')
+                    bootstrap_values.append(patch_measure['wavelet_energy_distribution'][wkey])
+                else:
+                    bootstrap_values.append(patch_measure[measure_key])
+        
+        # Calculate mean for this bootstrap sample
+        bootstrap_means.append(np.mean(bootstrap_values))
+    
+    bootstrap_means = np.array(bootstrap_means)
+    
+    # Calculate bootstrap SEM
+    bootstrap_sem = np.std(bootstrap_means)
+    
+    # Calculate confidence intervals
+    alpha = (100 - confidence) / 2
+    ci_lower = np.percentile(bootstrap_means, alpha)
+    ci_upper = np.percentile(bootstrap_means, 100 - alpha)
+    
+    return bootstrap_sem, ci_lower, ci_upper
 
 def analyze_neuron_patches(base_dir, neuron_idx, output_dir=None):
     """
@@ -915,12 +991,19 @@ def compare_models_complexity(model_dirs, model_names=None, neuron_indices=None,
     
     # Extract g values for x-axis
     g_values = []
-    for name in model_names:
-        g_str = extract_g_value(name)
+    for i, model_dir in enumerate(model_dirs):
+        # Extract from directory path, not from model_names which might be simple strings
+        model_path_name = Path(model_dir).parent.name
+        g_str = extract_g_value(model_path_name)
         try:
             g_val = float(g_str)
         except (ValueError, TypeError):
-            g_val = 0.0
+            # Fallback: if model_names was passed as simple strings like '0pt5'
+            g_str_fallback = model_names[i].replace('pt', '.')
+            try:
+                g_val = float(g_str_fallback)
+            except (ValueError, TypeError):
+                g_val = 0.0
         g_values.append(g_val)
     
     # Collect complexity measures for each model
@@ -937,18 +1020,28 @@ def compare_models_complexity(model_dirs, model_names=None, neuron_indices=None,
         else:
             indices = neuron_indices
         
-        # Collect all complexity measures
+        # Collect complexity measures grouped by neuron
+        # This preserves the hierarchical structure for neuron-level bootstrap
+        neuron_grouped_measures = []
         all_measures = []
         for neuron_idx in indices:
             try:
                 results = analyze_neuron_patches(model_dir, neuron_idx)
-                all_measures.extend(results['complexity_measures'])
+                neuron_measures = results['complexity_measures']
+                neuron_grouped_measures.append(neuron_measures)
+                all_measures.extend(neuron_measures)
             except FileNotFoundError:
                 continue
         
         # Aggregate across all patches and neurons
+        # Pass neuron_grouped to enable neuron-level bootstrap
         if all_measures:
-            agg = aggregate_complexity_measures(all_measures)
+            agg = aggregate_complexity_measures(
+                all_measures, 
+                use_bootstrap=True, 
+                n_bootstrap=1000,
+                neuron_grouped=neuron_grouped_measures
+            )
             model_complexities[g_val] = agg
     
     # Sort by g value for plotting

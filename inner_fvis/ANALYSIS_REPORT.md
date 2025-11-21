@@ -11,11 +11,12 @@ This report analyzes how training ResNet-50 models with different levels of Gaus
 **Section 1: Feature Visualizations**
 - Figure 1.1: Layer 3.2 Neuron Features Across Blur Levels
 - Figure 1.2: Layer 4.2 Neuron Features Across Blur Levels
-- Figure 1.3: Representative Individual Neurons
+- Figure 1.3a: Representative Neurons - Layer 2.2 (Early Features)
+- Figure 1.3b: Representative Neurons - Layer 3.2 (Mid-Level Features)
+- Figure 1.3c: Representative Neurons - Layer 4.2 (High-Level Features)
 
 **Section 2: Spectral Analysis**
-- Figure 2.1: Averaged Power Spectra Across Models
-- Figure 2.2: Power Spectra Relative to ImageNet Baseline
+- Figure 2.1: Power Spectra Relative to ImageNet Baseline
 
 **Section 3: Complexity Analysis**
 - Figure 3.1: Multi-Dimensional Complexity Comparison
@@ -70,9 +71,17 @@ We used feature visualization techniques to identify which image patches maximal
 
 Shows detailed examples of individual neurons across blur conditions, highlighting the transition from detail-selective to blur-tolerant feature detection.
 
-#### Figure 1.3: Representative Individual Neurons
-![Representative Neurons Grid](all_neurons_grid.png)
-*Selected representative neurons showing the systematic shift in feature preferences with increasing training blur.*
+#### Figure 1.3a: Representative Neurons - Layer 2.2 (Early Features)
+![Representative Neurons Grid - Layer 2.2](representative_neurons_grid_layer2.2.png)
+*Selected representative neurons from layer 2.2 showing the systematic shift in early feature preferences with increasing training blur.*
+
+#### Figure 1.3b: Representative Neurons - Layer 3.2 (Mid-Level Features)
+![Representative Neurons Grid - Layer 3.2](representative_neurons_grid_layer3.2.png)
+*Selected representative neurons from layer 3.2 showing the systematic shift in mid-level feature preferences with increasing training blur.*
+
+#### Figure 1.3c: Representative Neurons - Layer 4.2 (High-Level Features)
+![Representative Neurons Grid - Layer 4.2](representative_neurons_grid_layer4.2.png)
+*Selected representative neurons from layer 4.2 showing the systematic shift in high-level feature preferences with increasing training blur.*
 
 ---
 
@@ -84,47 +93,12 @@ We performed 2D Fourier analysis on the preferred patches of each neuron to quan
 
 1. **2D Power Spectrum:** Full frequency decomposition
 2. **Radial Averaging:** 1D power spectrum as a function of spatial frequency
-3. **Baseline Comparison:** Relative to random ImageNet patches
-4. **Bootstrap Statistics:** Robust error estimation (1000 iterations)
+3. **Baseline Comparison:** Relative to random ImageNet patches (8000 patches from 500 images)
+4. **Bootstrap Statistics:** Neuron-level resampling (1000 iterations) to account for within-neuron correlation. Because the 16 patches from each neuron are correlated (they all represent that neuron's preferences), we resample entire neurons rather than individual patches, providing more conservative and realistic error estimates
 
-### 2.2 Absolute Power Spectra
+### 2.2 Power Spectra Relative to ImageNet Baseline
 
-#### Figure 2.1: Averaged Power Spectra Across Models
-
-**Layer 2.2 (Early Layer):**
-![Models Averaged Power Spectra Comparison - Layer 2.2](spectra_analysis/models_averaged_comparison_layer2.2.png)
-
-**Layer 3.2 (Mid Layer):**
-![Models Averaged Power Spectra Comparison - Layer 3.2](spectra_analysis/models_averaged_comparison_layer3.2.png)
-
-**Layer 4.2 (Late Layer):**
-![Models Averaged Power Spectra Comparison - Layer 4.2](spectra_analysis/models_averaged_comparison_layer4.2.png)
-
-*Radially averaged power spectra for each model across different layers, showing the distribution of frequency content in preferred patches. Error bands represent bootstrap SEM (n=1000).*
-
-**Key Findings:**
-
-1. **Power-law Behavior:** All models show approximate 1/f^α fall-off characteristic of natural images
-
-2. **Low Frequency (< 0.1 cycles/pixel):**
-   - Models trained with higher blur (σ = 4-6) show elevated power
-   - Indicates preference for large-scale structure
-
-3. **Mid Frequency (0.1-0.5 cycles/pixel):**
-   - σ = 0-2 models maintain high power in this range
-   - σ = 3-6 models show progressive reduction
-   - This range corresponds to object-level features
-
-4. **High Frequency (> 0.5 cycles/pixel):**
-   - Sharp drop-off for all models
-   - σ = 0 maintains highest high-frequency power
-   - σ = 6 shows near-complete suppression of fine details
-
-5. **Ordering:** Clear monotonic relationship between training blur and frequency preference
-
-### 2.3 Relative to Baseline
-
-#### Figure 2.2: Power Spectra Relative to ImageNet Baseline
+#### Figure 2.1: Power Spectra Relative to ImageNet Baseline
 
 **Layer 2.2 (Early Layer):**
 ![Models Relative to Baseline - Layer 2.2](spectra_analysis/models_relative_to_baseline_layer2.2.png)
@@ -171,10 +145,10 @@ We quantified multiple dimensions of visual complexity using:
 2. **Shannon Entropy:** Information content in pixel values (higher = more complex/random)
 3. **Edge Density:** Proportion of edge pixels via Sobel filtering
 4. **Mean Edge Strength:** Average gradient magnitude
-5. **Wavelet Analysis:** Multi-scale, multi-orientation energy decomposition
+5. **Wavelet Analysis:** Multi-scale, multi-orientation energy decomposition (Daubechies-4 wavelet, 3 levels)
 6. **Total Wavelet Energy:** Overall signal energy
 
-All measures include bootstrap standard errors (1000 iterations) for robust uncertainty estimation.
+**Statistical Analysis:** All measures include bootstrap standard errors (1000 iterations) calculated at the **neuron level** rather than the patch level. This approach is critical because the 16 patches from each neuron are not independent—they all represent variations of that neuron's preferred features and are therefore correlated. By resampling entire neurons (with all their patches) rather than individual patches, we properly account for this hierarchical data structure and avoid underestimating the true uncertainty. This neuron-level bootstrap provides more conservative and statistically appropriate error estimates.
 
 ### 3.2 Results
 
