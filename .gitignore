@@ -9,9 +9,7 @@ __pycache__/
 .ipynb_checkpoints
 
 # Data directories - exclude all patch data folders
-inner_fvis/resnet50_BV*/
-inner_fvis/resnet50_gauss*/
-inner_fvis/resnet50/
+inner_fvis/patch_results/
 
 # Generated analysis outputs
 # inner_fvis/spectra_analysis/  # Now included in git for report figures

@@ -78,7 +78,7 @@ def extract_top_patches(model, layer_name, patch_size, channel, topk_patches, ar
     import torch.nn.functional as F
     import numpy as np
     
-    save_dir = f'{arch}/neuron_{layer_name}/{channel}/'
+    save_dir = f'patch_results/{arch}/neuron_{layer_name}/{channel}/'
     
     if overwrite or not os.path.exists(save_dir+'patches.png'):
         with open(save_dir+'files_all.txt', 'r') as f:

@@ -128,7 +128,7 @@ def extract_topk_image_indices_all_channels(dataloader, model, layer_name, topk_
 def save_txt(top_indices, arch, target_layer):
 
     for ch, img_list in tqdm(top_indices.items(), desc="Extracting patches"): 
-        save_dir = f'{arch}/neuron_{target_layer}/{ch}/'
+        save_dir = f'patch_results/{arch}/neuron_{target_layer}/{ch}/'
         os.makedirs(save_dir, exist_ok=True)
         
         with open(os.path.join(save_dir, 'files_all.txt'), 'w') as f:

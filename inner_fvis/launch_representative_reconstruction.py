@@ -119,7 +119,7 @@ if __name__ == "__main__":
     glist = ['0', '0pt5', '1', '2', '3', '4', '6']
     
     model_dirs = [
-        f'resnet50_BV_g{g}For60_E60/neuron_{args.target_layer}' 
+        f'patch_results/resnet50_BV_g{g}For60_E60/neuron_{args.target_layer}' 
         for g in glist
     ]
     

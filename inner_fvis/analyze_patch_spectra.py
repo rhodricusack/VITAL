@@ -1056,20 +1056,20 @@ if __name__ == "__main__":
     glist = ['0', '0pt5', '1', '1pt5', '2', '3', '4', '6']
     for layer in ['2.2','3.2', '4.2']:
         # compare_models_averaged_spectra(
-        #     model_dirs=[f'inner_fvis/resnet50_BV_g{g}For60_E60/neuron_layer{layer}' for g in glist],
+        #     model_dirs=[f'inner_fvis/patch_results/resnet50_BV_g{g}For60_E60/neuron_layer{layer}' for g in glist],
         #     model_names=glist,
         #     output_path=f'inner_fvis/spectra_analysis/models_averaged_comparison_layer{layer}.png'
         # )
         
         # compare_models_relative_to_baseline(
-        #     model_dirs=[f'inner_fvis/resnet50_BV_g{g}For60_E60/neuron_layer{layer}' for g in glist],
+        #     model_dirs=[f'inner_fvis/patch_results/resnet50_BV_g{g}For60_E60/neuron_layer{layer}' for g in glist],
         #     baseline=baseline,
         #     model_names=glist,
         #     output_path=f'inner_fvis/spectra_analysis/models_relative_to_baseline_layer{layer}.png'
         # )
 
         compare_models_complexity(
-            model_dirs=[f'inner_fvis/resnet50_BV_g{g}For60_E60/neuron_layer{layer}' for g in glist],
+            model_dirs=[f'inner_fvis/patch_results/resnet50_BV_g{g}For60_E60/neuron_layer{layer}' for g in glist],
             model_names=glist,
             output_path=f'inner_fvis/spectra_analysis/models_complexity_comparison_layer{layer}.png'
         )
