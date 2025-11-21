@@ -8,15 +8,17 @@ from tqdm import tqdm
 import torchvision.utils as vutils
 import argparse
 
+from imagenet2txt_blurry import generate_model
+
 def list_of_ints(arg):
     return list(map(int, arg.split(',')))
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--target_layer', type=str, default='layer4_2')
-parser.add_argument('--arch', type=str, default='resnet50')
+parser.add_argument('--target_layer', type=str, default='module.layer4.0.relu')
+parser.add_argument('--arch', type=str, default='resnet50_gauss_6')
 parser.add_argument('--batch_size', type=int, default=256)
 parser.add_argument('--patch_size', type=int, default=64)
-parser.add_argument('--chs', type=list_of_ints, default="54,1935")
+parser.add_argument('--chs', type=list_of_ints, default="1935")
 parser.add_argument('--split_N', type=int, default=None)
 
 args = parser.parse_args()
@@ -55,8 +57,8 @@ def split_network(model, req_name):
                 if layer.__class__.__name__ == 'Sequential':
                     get_layers(layer, prefix=prefix + [name])
                 else:
-                    layers.append("_".join(prefix + [name]))
-                    feat_ext.append(layer)
+                    layers.append(".".join(prefix + [name]))
+                    feat_ext.append(layer)  
 
     get_layers(model)
     return torch.nn.Sequential(*feat_ext)
@@ -112,26 +114,29 @@ def patchify(inputs, patch_size=64):
     patches = patches.transpose(1, 2).contiguous().view(-1, inputs.shape[1], patch_size, patch_size)
     return patches
 
-def generate_model(arch='resnet50', target='layer4_2'):
-    """
-    Generates a PyTorch model truncated at the specified target layer.
+# def generate_model(arch='resnet50', target='layer4_2'):
+#     """
+#     Generates a PyTorch model truncated at the specified target layer.
 
-    Args:
-        arch (str): The architecture of the model to load (e.g., 'resnet50').
-        target (str): The name of the layer up to which the model is truncated.
+#     Args:
+#         arch (str): The architecture of the model to load (e.g., 'resnet50').
+#         target (str): The name of the layer up to which the model is truncated.
 
-    Returns:
-        torch.nn.Sequential: A PyTorch model truncated at the specified target layer.
-    """
-    net = models.__dict__[arch](pretrained=True)  # Load the specified model architecture
-    net = net.to('cuda')  # Move the model to GPU
-    print('==> Resuming from checkpoint..')
-    net = net.eval()  # Set the model to evaluation mode
+#     Returns:
+#         torch.nn.Sequential: A PyTorch model truncated at the specified target layer.
+#     """
+#     net = models.__dict__[arch](pretrained=True)  # Load the specified model architecture
 
+
+#     return net
+
+def generate_model_reverse(arch='resnet50', target='layer4_2'):
+    net = generate_model(arch=arch)
+ 
     # Truncate the model at the specified target layer
     net = split_network(model=net, req_name=target)
-
     return net
+
 
 def find_repeated_indices(lst):
     """
@@ -245,6 +250,8 @@ def extract_features(dataloader, net, patch_size, channels):
 
                 x_resized = torch.nn.functional.interpolate(x, size=224, mode='bilinear', align_corners=False)
 
+                y = net(x_resized)
+
                 patch_outputs = net(x_resized).mean((2, 3))
 
                 for ch in range(len(channels)):
@@ -297,7 +304,7 @@ if __name__ == '__main__':
     dataloader = generate_dataloader(batch_size=batch_size, split_N=split_N)
     
     # Generate a PyTorch model truncated at the specified target layer
-    net = generate_model(arch=arch, target=target_layer)
+    net = generate_model_reverse(arch=arch, target=target_layer)
 
     # Extract and save the top patches for the specified channels
     extract_features(dataloader=dataloader,

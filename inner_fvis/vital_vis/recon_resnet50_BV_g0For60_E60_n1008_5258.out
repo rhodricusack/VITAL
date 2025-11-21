@@ -1,0 +1,16 @@
+==================================================
+Job ID: 5258
+Architecture: resnet50_BV_g0For60_E60
+Target Layer: layer4.2
+Channel: 1008
+Started: Fri 21 Nov 2025 07:37:35 GMT
+==================================================
+Namespace(target_layer='layer4.2', arch='resnet50_BV_g0For60_E60', batch_size=256, patch_size=64, chs=[1008], split_N=None)
+==> Loading ImageNet dataset - split train
+==> ImageNet directory: /data/ILSVRC2012/
+==> transform: Compose(
+    Resize(size=256, interpolation=bilinear, max_size=None, antialias=True)
+    CenterCrop(size=(224, 224))
+    ToTensor()
+    Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+)

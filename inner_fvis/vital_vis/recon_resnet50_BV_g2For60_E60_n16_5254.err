@@ -1,0 +1,5 @@
+usage: reverse_engineer_neurons.py [-h] [--target_layer TARGET_LAYER]
+                                   [--arch ARCH] [--batch_size BATCH_SIZE]
+                                   [--topk_images TOPK_IMAGES]
+                                   [--split_N SPLIT_N]
+reverse_engineer_neurons.py: error: unrecognized arguments: --chs 16

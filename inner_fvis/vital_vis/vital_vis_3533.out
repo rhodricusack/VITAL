@@ -1,0 +1,2 @@
+Namespace(target_layer='layer3.2', arch='resnet50_BV_g0For60_E60', patch_size=64, topk_patches=50, channel=64, overwrite=0)
+Skipping extraction for channel 64 as resnet50_BV_g0For60_E60/neuron_layer3.2/64//patches.png already exists and overwrite is False.

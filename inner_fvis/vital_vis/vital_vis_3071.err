@@ -1,0 +1,5 @@
+/var/spool/slurm/d/job03071/slurm_script: line 12: conda: command not found
+  File "txt2patch.py", line 27
+    f"resnet50_BV_g0For60_E{epoch}": f"/data/blurry_vision_sup_RN50/supervised_resnet50_gauss_0_for_60_epoch/outmodel/checkpoint_supervised_resnet50_gauss_0_for_60_epoch{epoch}.pth.tar",
+                                  ^
+SyntaxError: invalid syntax

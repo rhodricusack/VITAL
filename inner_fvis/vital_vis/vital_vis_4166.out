@@ -1,0 +1,1 @@
+Namespace(target_layer='layer4.2', arch='resnet50_BV_g6For60_E60', patch_size=64, topk_patches=50, channel=688, overwrite=0)
