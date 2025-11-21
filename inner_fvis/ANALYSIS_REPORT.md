@@ -74,7 +74,7 @@ We used feature visualization techniques to identify which image patches maximal
 
 ### 1.3 Representative Neurons
 
-Shows detailed examples of individual neurons across blur conditions, highlighting the transition from detail-selective to blur-tolerant feature detection.
+Shows detailed examples of individual neurons across blur conditions, highlighting the transition from detail-selective to blur-tolerant feature detection. Neurons have been chosen to have the most similar shape of frequency spectrum to the pool of all neurons (most representative on left column).
 
 #### Figure 1.4a: Representative Neurons - Layer 2.2 (Early Features)
 ![Representative Neurons Grid - Layer 2.2](visualization_grids/representative_neurons_grid_layer2.2.png)
