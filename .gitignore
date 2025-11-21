@@ -45,3 +45,4 @@ inner_fvis/*.png
 # OS
 .DS_Store
 Thumbs.db
+*.err
