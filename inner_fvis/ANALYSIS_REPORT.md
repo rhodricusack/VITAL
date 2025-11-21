@@ -25,7 +25,7 @@ This report analyzes how training ResNet-50 models with different levels of Gaus
 ## 1. Feature Visualization Analysis
 
 ### 1.1 Overview
-We used feature visualization techniques to identify which image patches maximally activate individual neurons across different models. For each neuron, we extracted the top 16 patches from ImageNet that produced the highest activations.
+We used feature visualization techniques to identify which image patches maximally activate individual neurons across different models. For each neuron, using the VITAL approximation procedure we found the top 16 patches from ImageNet that produced the highest activations.
 
 ### 1.2 Visualization Grids (`all_neurons_grid_*.png`)
 
