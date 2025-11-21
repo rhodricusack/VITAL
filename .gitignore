@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Data directories - exclude all patch data folders
+inner_fvis/resnet50_BV*/
+inner_fvis/resnet50_gauss*/
+inner_fvis/resnet50/
+
+# Generated analysis outputs
+inner_fvis/spectra_analysis/
+inner_fvis/vital_vis/
+
+# Train/test data directories
+inner_fvis/train/
+inner_fvis/test/
+
+# Keep only the essential visualization images and code
+inner_fvis/*.png
+!inner_fvis/all_neurons_grid*.png
+
+# Model checkpoints and weights
+*.pth
+*.tar
+*.ckpt
+
+# Data files
+*.npz
+*.npy
+
+# Slurm logs
+*.out
+*.err
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
