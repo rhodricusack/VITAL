@@ -331,7 +331,7 @@ if __name__ == "__main__":
             "inner_fvis/patch_results/resnet50_BV_g4For60_E60/neuron_layer3.2",
             "inner_fvis/patch_results/resnet50_BV_g6For60_E60/neuron_layer3.2"
         ],
-        out_path="inner_fvis/all_neurons_grid_layer3.2.png"
+        out_path="inner_fvis/visualization_grids/all_neurons_grid_layer3.2.png"
     )
 
     composite_grid(
@@ -345,7 +345,7 @@ if __name__ == "__main__":
             "inner_fvis/patch_results/resnet50_BV_g4For60_E60/neuron_layer4.2",
             "inner_fvis/patch_results/resnet50_BV_g6For60_E60/neuron_layer4.2"
         ],
-        out_path="inner_fvis/all_neurons_grid_layer4.2.png"
+        out_path="inner_fvis/visualization_grids/all_neurons_grid_layer4.2.png"
     )
     
     composite_grid(
@@ -359,7 +359,7 @@ if __name__ == "__main__":
             "inner_fvis/patch_results/resnet50_BV_g4For60_E60/neuron_layer2.2",
             "inner_fvis/patch_results/resnet50_BV_g6For60_E60/neuron_layer2.2",
         ],
-        out_path="inner_fvis/all_neurons_grid_layer2.2.png"
+        out_path="inner_fvis/visualization_grids/all_neurons_grid_layer2.2.png"
     )
     # Create representative neuron grids (8 neurons most similar to model average)
     composite_grid_representative(
@@ -374,7 +374,7 @@ if __name__ == "__main__":
             "inner_fvis/patch_results/resnet50_BV_g6For60_E60/neuron_layer3.2"
         ],
         n_neurons=8,
-        out_path="inner_fvis/representative_neurons_grid_layer3.2.png",
+        out_path="inner_fvis/visualization_grids/representative_neurons_grid_layer3.2.png",
         max_neurons=50  # Only consider first 50 neurons for speed
     )
     
@@ -390,7 +390,7 @@ if __name__ == "__main__":
             "inner_fvis/patch_results/resnet50_BV_g6For60_E60/neuron_layer4.2"
         ],
         n_neurons=8,
-        out_path="inner_fvis/representative_neurons_grid_layer4.2.png",
+        out_path="inner_fvis/visualization_grids/representative_neurons_grid_layer4.2.png",
         max_neurons=50
     )
 
@@ -406,6 +406,6 @@ if __name__ == "__main__":
             "inner_fvis/patch_results/resnet50_BV_g6For60_E60/neuron_layer2.2",
         ],
         n_neurons=8,
-        out_path="inner_fvis/representative_neurons_grid_layer2.2.png",
+        out_path="inner_fvis/visualization_grids/representative_neurons_grid_layer2.2.png",
         max_neurons=50
     )

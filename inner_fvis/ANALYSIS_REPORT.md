@@ -31,9 +31,9 @@ We used feature visualization techniques to identify which image patches maximal
 ### 1.2 Visualization Grids (`all_neurons_grid_*.png`)
 
 **Files:**
-- `all_neurons_grid_layer2.2.png` - Early layer features
-- `all_neurons_grid_layer3.2.png` - Mid-level features  
-- `all_neurons_grid_layer4.2.png` - High-level features
+- `visualization_grids/all_neurons_grid_layer2.2.png` - Early layer features
+- `visualization_grids/all_neurons_grid_layer3.2.png` - Mid-level features  
+- `visualization_grids/all_neurons_grid_layer4.2.png` - High-level features
 
 **Layout:**
 - Rows: Different blur levels during training (σ = 0, 0.5, 1, 1.5, 2, 3, 4, 6)
@@ -41,11 +41,11 @@ We used feature visualization techniques to identify which image patches maximal
 - Each cell: 4×4 mosaic of top activating patches
 
 #### Figure 1.1: Layer 3.2 Neuron Features Across Blur Levels
-![Layer 3.2 Visualization Grid](all_neurons_grid_layer3.2.png)
+![Layer 3.2 Visualization Grid](visualization_grids/all_neurons_grid_layer3.2.png)
 *Mid-level feature preferences across different training blur conditions. Each row represents a different blur level (σ), each column a different neuron.*
 
 #### Figure 1.2: Layer 4.2 Neuron Features Across Blur Levels
-![Layer 4.2 Visualization Grid](all_neurons_grid_layer4.2.png)
+![Layer 4.2 Visualization Grid](visualization_grids/all_neurons_grid_layer4.2.png)
 *High-level feature preferences across different training blur conditions.*
 
 **Key Observations:**
@@ -72,15 +72,15 @@ We used feature visualization techniques to identify which image patches maximal
 Shows detailed examples of individual neurons across blur conditions, highlighting the transition from detail-selective to blur-tolerant feature detection.
 
 #### Figure 1.3a: Representative Neurons - Layer 2.2 (Early Features)
-![Representative Neurons Grid - Layer 2.2](representative_neurons_grid_layer2.2.png)
+![Representative Neurons Grid - Layer 2.2](visualization_grids/representative_neurons_grid_layer2.2.png)
 *Selected representative neurons from layer 2.2 showing the systematic shift in early feature preferences with increasing training blur.*
 
 #### Figure 1.3b: Representative Neurons - Layer 3.2 (Mid-Level Features)
-![Representative Neurons Grid - Layer 3.2](representative_neurons_grid_layer3.2.png)
+![Representative Neurons Grid - Layer 3.2](visualization_grids/representative_neurons_grid_layer3.2.png)
 *Selected representative neurons from layer 3.2 showing the systematic shift in mid-level feature preferences with increasing training blur.*
 
 #### Figure 1.3c: Representative Neurons - Layer 4.2 (High-Level Features)
-![Representative Neurons Grid - Layer 4.2](representative_neurons_grid_layer4.2.png)
+![Representative Neurons Grid - Layer 4.2](visualization_grids/representative_neurons_grid_layer4.2.png)
 *Selected representative neurons from layer 4.2 showing the systematic shift in high-level feature preferences with increasing training blur.*
 
 ---
