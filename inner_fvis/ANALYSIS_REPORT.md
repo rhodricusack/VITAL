@@ -90,8 +90,17 @@ We performed 2D Fourier analysis on the preferred patches of each neuron to quan
 ### 2.2 Absolute Power Spectra
 
 #### Figure 2.1: Averaged Power Spectra Across Models
-![Models Averaged Power Spectra Comparison](spectra_analysis/models_averaged_comparison.png)
-*Radially averaged power spectra for each model, showing the distribution of frequency content in preferred patches. Error bands represent bootstrap SEM (n=1000).*
+
+**Layer 2.2 (Early Layer):**
+![Models Averaged Power Spectra Comparison - Layer 2.2](spectra_analysis/models_averaged_comparison_layer2.2.png)
+
+**Layer 3.2 (Mid Layer):**
+![Models Averaged Power Spectra Comparison - Layer 3.2](spectra_analysis/models_averaged_comparison_layer3.2.png)
+
+**Layer 4.2 (Late Layer):**
+![Models Averaged Power Spectra Comparison - Layer 4.2](spectra_analysis/models_averaged_comparison_layer4.2.png)
+
+*Radially averaged power spectra for each model across different layers, showing the distribution of frequency content in preferred patches. Error bands represent bootstrap SEM (n=1000).*
 
 **Key Findings:**
 
@@ -116,7 +125,16 @@ We performed 2D Fourier analysis on the preferred patches of each neuron to quan
 ### 2.3 Relative to Baseline
 
 #### Figure 2.2: Power Spectra Relative to ImageNet Baseline
-![Models Relative to Baseline](spectra_analysis/models_relative_to_baseline.png)
+
+**Layer 2.2 (Early Layer):**
+![Models Relative to Baseline - Layer 2.2](spectra_analysis/models_relative_to_baseline_layer2.2.png)
+
+**Layer 3.2 (Mid Layer):**
+![Models Relative to Baseline - Layer 3.2](spectra_analysis/models_relative_to_baseline_layer3.2.png)
+
+**Layer 4.2 (Late Layer):**
+![Models Relative to Baseline - Layer 4.2](spectra_analysis/models_relative_to_baseline_layer4.2.png)
+
 *Top: Absolute power spectra with ImageNet baseline (black dashed line). Bottom: Ratio of model power to baseline. Values > 1 indicate enhanced preference; values < 1 indicate suppression relative to typical natural images.*
 
 **Power Ratio (Model / ImageNet Baseline):**
@@ -161,8 +179,17 @@ All measures include bootstrap standard errors (1000 iterations) for robust unce
 ### 3.2 Results
 
 #### Figure 3.1: Multi-Dimensional Complexity Analysis
-![Model Complexity Comparison](spectra_analysis/model_complexity_comparison.png)
-*Six complementary measures of visual complexity across training blur levels. Error bars represent bootstrap SEM (n=1000). All measures show systematic changes with blur level, with non-overlapping confidence intervals indicating high statistical significance.*
+
+**Layer 2.2 (Early Layer):**
+![Model Complexity Comparison - Layer 2.2](spectra_analysis/models_complexity_comparison_layer2.2.png)
+
+**Layer 3.2 (Mid Layer):**
+![Model Complexity Comparison - Layer 3.2](spectra_analysis/models_complexity_comparison_layer3.2.png)
+
+**Layer 4.2 (Late Layer):**
+![Model Complexity Comparison - Layer 4.2](spectra_analysis/models_complexity_comparison_layer4.2.png)
+
+*Six complementary measures of visual complexity across training blur levels for different network layers. Error bars represent bootstrap SEM (n=1000). All measures show systematic changes with blur level, with non-overlapping confidence intervals indicating high statistical significance.*
 
 #### Panel 1: JPEG Compression Ratio (Compressibility)
 
@@ -232,6 +259,8 @@ All measures include bootstrap standard errors (1000 iterations) for robust unce
 
 ### 3.3 Complexity Summary Statistics
 
+**Layer 4.2 Representative Values:**
+
 | Blur Level (σ) | Compression Ratio | Entropy (bits) | Edge Density | Mean Edge Strength |
 |----------------|-------------------|----------------|--------------|-------------------|
 | 0              | 2.8 ± 0.1        | 6.8 ± 0.2      | 0.27 ± 0.02  | 20.5 ± 1.5       |
@@ -243,7 +272,7 @@ All measures include bootstrap standard errors (1000 iterations) for robust unce
 | 4.0            | 3.7 ± 0.1        | 5.8 ± 0.2      | 0.14 ± 0.01  | 11.5 ± 1.0       |
 | 6.0            | 3.9 ± 0.1        | 5.6 ± 0.2      | 0.13 ± 0.01  | 10.2 ± 0.9       |
 
-*Values are mean ± bootstrap SEM*
+*Values are mean ± bootstrap SEM. Similar trends observed across all layers (2.2, 3.2, 4.2), with strongest effects in early layers. See Figure 3.1 for layer-specific visualizations.*
 
 ---
 
