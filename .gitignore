@@ -14,7 +14,7 @@ inner_fvis/resnet50_gauss*/
 inner_fvis/resnet50/
 
 # Generated analysis outputs
-inner_fvis/spectra_analysis/
+# inner_fvis/spectra_analysis/  # Now included in git for report figures
 inner_fvis/vital_vis/
 
 # Train/test data directories
